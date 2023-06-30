@@ -1,38 +1,36 @@
-//const { createServer } = require('http');
 import { createServer } from 'http';
-//import { createServer } from 'https';
-const https = require('https');
+import https from 'https';
 
-https.get('https://pokeapi.co/api/v2/pokemon/pikachu', (res) => {
-  let data = '';
+const server = createServer ((res) => {
+  console.log("datosss");
+    https.get('https://pokeapi.co/api/v2/pokemon/pikachu', (req) => {
+      let data = '';
+    // A callback for when a data chunk is received.
+    req.on('data', (chunk) => {
+      data += chunk;
+    });
 
-  // A callback for when a data chunk is received.
-  res.on('data', (chunk) => {
-    data += chunk;
-  });
-
-  // A callback for when the request is complete.
-  res.on('end', () => {
-    let response = JSON.parse(data);
-    console.log(response);
-  });
+    // A callback for when the request is complete.
+    req.on('end', () => {
+      let response = JSON.parse(data);
+      console.log(response);
+     res.end(response);
+    });
 
 }).on("error", (err) => {
-  console.log("Error: " + err.message);
+  console.error("Error: " + err.message);
 });
 
-
-const http = createServer((req, res) => {
-    res.on('data', (chunk) => {
-        data += chunk;
-      });
-    
-
 });
+
 const config ={
-    hostname: '127.0.0.4',//localhost',
-    port:5500
+    hostname: '128.0.1.2',//localhost',
+    port:5080
 };
-http.listen(config, ()=>{
+server.listen(config, ()=>{
     console.log(`https://${config.hostname}:${config.port}/`);
-})
+});
+
+/* server.listen(config.port, () => {
+  console.log(`https://localhost:${config.port}/`);
+}); */
